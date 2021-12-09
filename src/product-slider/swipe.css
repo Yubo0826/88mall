@@ -1,0 +1,97 @@
+:root {
+    --vps-controls-svg-size: 44px;
+}
+
+*, :after, :before {
+    box-sizing: border-box;
+}
+
+.vps {
+    width: 100%;
+}
+.vps__wrapper {
+    overflow: hidden;
+    visibility: hidden;
+    position: relative;
+    max-width: 100%;
+}
+.vps__slides {
+    overflow: hidden;
+    position: relative;
+}
+.vps__slides .slide {
+    float: left;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    vertical-align: baseline;
+
+}
+
+
+.vps__controls > * {
+    position: absolute;
+    height: var(--vps-controls-svg-size);
+    width: var(--vps-controls-svg-size);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.vps__controls > * :hover {
+    cursor: pointer;
+}
+
+.vps__controls__prev {
+    left: 0px;
+}
+.vps__controls__next {
+    right: 0px;
+}
+
+.vps__thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100% + 20px);
+    margin: 0 -5px 0 -5px;
+}
+
+.vps__thumbnails .thumb {
+    box-sizing: inherit;
+    width: calc(16.66% - 10px);
+    border: 1px solid #ccc;
+    margin: 5px;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.vps__thumbnails .thumb:hover {
+    cursor: pointer;
+}
+
+.vps__thumbnails .thumb.active,
+.vps__thumbnails .thumb:hover
+{
+    border-color: black;
+}
+
+img {
+    width: 100%;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .vps__controls__prev {
+        left: -0px;
+    }
+    .vps__controls__next {
+        right: -0px;
+    }
+
+    .vps__thumbnails .thumb {
+        width: calc(25% - 10px);
+        margin: 5px;
+    }
+}
