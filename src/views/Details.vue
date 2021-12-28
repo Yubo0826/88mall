@@ -82,9 +82,14 @@
               <AddToCartBtn @click="addToCart"></AddToCartBtn>
               <button class="buyNow" @click="buyNow">立即購買</button>
             </div>
-            <div class="like">
-              <box-icon name='star'></box-icon>
-              <span>喜歡</span>
+            <div class="pd-track">
+              <div v-if="isTrack" @click="handleTrack">
+                <box-icon name='star' type='solid' color='#f8e662'></box-icon>
+              </div>
+              <div v-else @click="handleTrack">
+                <box-icon name='star'></box-icon>
+              </div>
+              <span>追蹤商品</span>
             </div>
           </div>
         </div>
@@ -101,17 +106,20 @@ import 'boxicons';
 import { VueProductSlider } from "../product-slider/index";
 import { getProdDetail, getProdImgUrl } from "@/request/api.js";
 import { getStorage, ref, listAll } from "firebase/storage";
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, collection, query, where, getDocs, addDoc, deleteDoc, } from "firebase/firestore";
 import { db, auth } from "@/config/firebaseConfig.js";
 
 export default {
   data() {
     return {
+      isTrack: false,
       productInfo: {},
       imgsRefArr: [],
       qty: 1,
       size: null,
       spec: null,
+      userDocID: null,
     };
   },
   
@@ -132,6 +140,33 @@ export default {
     getProdDetail(this.$route.query.id).then((res) => {
       this.productInfo = res;
     });
+
+    // 檢查這項商品使用者有無追蹤
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const q = query(
+          collection(db, "users"),
+          where("email", "==", user.email)
+        );
+        getDocs(q).then((val) => {
+          val.forEach((d) => {
+            // 從 firestore取得使用者的文件 ID，存入元件 Data中
+            this.userDocID = d.id;
+            const trackRef = collection(db, "users", d.id, "track");
+            const u = query(trackRef, where('id', '==', this.productInfo.id));
+            getDocs(u).then((val) => {
+              val.forEach((d) => {
+                if(d.exists()) {
+                  this.isTrack = true;
+                }else {
+                  this.isTrack = false;
+                }
+              })
+            })
+          })
+        });
+      }
+    })
   },
 
   mounted() {
@@ -251,11 +286,54 @@ export default {
           localStorage.setItem("products_in_cart", JSON.stringify(products));
         }
 
-        alert("此商品已加入購物車123!");
+        alert("此商品已加入購物車!");
       }
     },
 
-    buyNow() {},
+    buyNow() {
+      this.addToCart();
+      this.$router.push('/cart');
+    },
+
+    handleTrack() {
+      let product = {
+      id: this.productInfo.id,
+      imgRef: this.productInfo.imgRef,
+      name: this.productInfo.name,
+      price: this.productInfo.price,
+      };
+
+      const user = auth.currentUser;
+      if (user) {
+        const trackRef = collection(db, "users", this.userDocID, "track");
+        // 有追蹤情況，移除商品doc
+        if(this.isTrack) {
+          const q = query(trackRef, where('id', '==', this.productInfo.id));
+          getDocs(q).then((val) => {
+            val.forEach((d) => {
+              deleteDoc(doc(db, "users", this.userDocID, "track", d.id)).then(() => {
+                this.isTrack = false;
+                alert('取消追蹤!');
+              });
+            })
+          })
+        }
+        //無追蹤情況，加入doc
+        else {
+          addDoc(trackRef, product).then(() => {
+            this.isTrack = true;
+            alert("以追蹤此商品!");
+          });
+        }
+      }
+      
+    
+      else {
+        alert('尚未登入!');
+      }
+    },
+
+
   },
 
   directives: {
@@ -394,7 +472,7 @@ export default {
               cursor: pointer;
             }
           }
-          .like {
+          .pd-track {
             display: flex;
             align-items: center;
             font-weight: 400;

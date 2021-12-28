@@ -57,7 +57,7 @@ export default {
             display: flex;
             margin: 0 auto;
             border: 1px solid #aaa;
-            // tab
+            border-radius: 15px;
             .tab {
                 width: 150px;
                 height: 100%;
