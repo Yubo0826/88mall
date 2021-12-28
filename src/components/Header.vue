@@ -20,8 +20,8 @@ export default {
 <style lang="less">
     .header {
         width: 100%;
-        background: #ffff7c;
-        .header-container {           
+        background: var(--color-dark-yellow);
+        .header-container {
             text-align: center;
         }
     }

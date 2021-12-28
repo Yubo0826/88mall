@@ -32,7 +32,7 @@
 
 <script>
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
 import { auth, db } from "@/config/firebaseConfig.js";
 
 export default {
@@ -41,7 +41,7 @@ export default {
           action: 'login',
           login: {
             email: 'ujhy669917@gmail.com',
-            password: 'qaz6699wsx'
+            password: '123123123'
           },
           register: {
             name: '連小逼',
@@ -60,7 +60,8 @@ export default {
     userLogin() {
         signInWithEmailAndPassword(auth, this.login.email, this.login.password)
         .then(()=> {
-          this.$router.push('/user');  
+          this.$router.push('/user');
+          this.handleUserCart();
           alert('Successfully login!.');
         })
         .catch((error)=> {
@@ -69,6 +70,7 @@ export default {
            this.pdWrong = errorCode == 'auth/wrong-password' ? true : false;        
         })
     },
+
     userRegistration() {
         createUserWithEmailAndPassword(auth, this.register.email, this.register.password).then(() => {
             alert('註冊成功!'); 
@@ -88,6 +90,27 @@ export default {
               this.emailRegisted = errorCode == 'auth/email-already-in-use' ? true : false;        
           })
     },
+
+    handleUserCart() {
+      const q = query(collection(db, 'users'), where('email', '==', this.login.email))
+      getDocs(q).then((val) => {
+          val.forEach((d) => {
+              const cartRef = collection(db, 'users', d.id, 'cart');
+              if(localStorage.getItem('products_in_cart') !== null) {
+                let items = JSON.parse(localStorage.getItem('products_in_cart'));
+                items.forEach((item) => {
+                  addDoc(cartRef, item);
+                })
+              }
+              getDocs(cartRef).then((val) => {
+                console.log(val);
+                  this.$store.commit('setCart', val.size);
+              });
+              localStorage.clear('products_in_cart');
+              
+          })
+      })
+    }
   },
   
 }

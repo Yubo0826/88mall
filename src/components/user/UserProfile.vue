@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "firebase/auth";
+import { signOut, sendPasswordResetEmail } from "firebase/auth";
 import { collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
 import { db, auth } from "@/config/firebaseConfig.js";
 
@@ -52,26 +52,26 @@ export default {
         // 獲取當前登錄的用戶方面
         // firebase 推薦 onAuthStateChanged() 而非 currentUser()
         // currentUser() 網頁f5 登入狀態就會消失
-        onAuthStateChanged(auth, (user) => {
-            if(user) {
-                const email = user.email;
-                this.user.email = email;
-                // 從 firestore搜尋 email相符的資料
-                const q = query(collection(db, 'users'), where('email', '==', email))
-                getDocs(q).then((val) => {
-                    val.forEach((doc) => {
-                        let data = doc.data();
-                        // 此 id為 firestore文件名稱
-                        this.user.id = doc.id;
-                        this.user.name = data.name;
-                        this.user.address = data.address;
-                        this.user.phone = data.phone;
-                    })
+        const user = auth.currentUser;
+        if(user) {
+            const email = user.email;
+            this.user.email = email;
+            // 從 firestore搜尋 email相符的資料
+            const q = query(collection(db, 'users'), where('email', '==', email))
+            getDocs(q).then((val) => {
+                val.forEach((doc) => {
+                    let data = doc.data();
+                    // 此 id為 firestore文件 ID
+                    this.user.id = doc.id;
+                    this.user.name = data.name;
+                    this.user.address = data.address;
+                    this.user.phone = data.phone;
                 })
-            }else {
-                console.log('無人登入!');
-            }
-        })
+            })
+        }else {
+            console.log('無人登入!');
+        }
+
     },
     methods: {
         saveProfile() {
@@ -90,9 +90,10 @@ export default {
         signout() {
             signOut(auth).then(() => {
                 alert('會員已登出');
+                this.$store.commit('setCart', 0);
                 this.$router.push('/login');
             }).catch((err) => {
-                console.log(err);
+                console.log(err);    
             })
         },
 

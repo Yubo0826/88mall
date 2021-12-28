@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "boxicons": "^2.1.1",
     "core-js": "^3.6.5",
     "firebase": "^9.0.2",
     "gulp-less": "^5.0.0",
@@ -18,7 +19,9 @@
     "vue-router": "^4.0.0-0",
     "vue-slick": "^1.1.16",
     "vue-slick-carousel": "^1.0.6",
+    "vue-slide-up-down": "^2.0.1",
     "vue3-carousel": "^0.1.32",
+    "vue3-slide-up-down": "^1.2.5",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

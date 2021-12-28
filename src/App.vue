@@ -3,7 +3,7 @@
     <Header />
     <Navbar />
     <!-- 渲染 route 的位置 -->
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
     <Footer />
   </div> 
 </template>
@@ -29,6 +29,7 @@ export default {
 
 :root {
     --color-lighten-white: #dddddd;
+    --color-lighten-orange: #ee9b41;
     --color-dark-yellow: #f8e662;
     --color-gray: #a3a5a6;
 }

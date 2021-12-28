@@ -12,7 +12,9 @@
         </template>
       </carousel>
     </div>
-    <ProductList :arr="productsArr"></ProductList>
+    <div class="list-wrap">
+      <ProductList></ProductList>
+    </div>
     <!-- <button @click="yyd"></button> -->
 
   </div>
@@ -20,9 +22,8 @@
 
 <script>
 import ProductList from '@/components/Product-list.vue';
-import { getAllProds, yyd } from '@/request/api.js';
-import 'vue3-carousel/dist/carousel.css';
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
+import 'vue3-carousel/dist/carousel.css';
 
 export default {
   name: 'Home',
@@ -33,18 +34,6 @@ export default {
     return {
       productsArr: [],
       bannerArr: ['banner.png', 'banner.png', 'banner.png', 'banner.png'],
-    }
-  },
-  created() {
-    // console.log(this.productsArr);
-    getAllProds().then((data) => {
-      console.log(data);
-      this.productsArr = data;
-    })
-  },
-  methods: {
-    'yyd': function() {
-      yyd();
     }
   },
 }
@@ -69,5 +58,9 @@ export default {
       transform: translate(0,0);
     }
   }
+}
+
+.list-wrap {
+  display: flex;
 }
 </style>

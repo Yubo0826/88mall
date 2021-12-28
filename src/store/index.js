@@ -2,19 +2,21 @@ import {createStore} from 'vuex'
 
 export default createStore({
     state: {
-      // 是否顯示登入模塊
-      ifShowLoginModal: false
+      itemInCart: 0,
     },
     mutations: {
-      showModal(state) {
-        state.ifShowLoginModal = true
+      setCart(state, val) {
+        state.itemInCart = val;
       },
-      hideModal(state) {
-        state.ifShowLoginModal = false
+      incrementCart(state) {
+        state.itemInCart++;
+      },
+      reduceCart(state) {
+        state.itemInCart--;
       }
     },
     actions: {
-
+      // 由於 mutations只能處理同步函數，所以使用異步函數要在 actions
     },
     modules: {
 
