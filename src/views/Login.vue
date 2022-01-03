@@ -1,5 +1,8 @@
 <template>
   <div class="login-container">
+    <div class="left">
+      <img src="../assets/image/undraw_remotely_2j6y.svg" alt="">
+    </div>
     <div class="login-content">
       <ul class="tab">
         <li @click="action='register'" :class="action==='register' ? 'active' : 'inactive' ">用戶註冊</li>
@@ -13,7 +16,7 @@
           <p v-show="pdWrong">*密碼錯誤!</p>
           <input type="text" v-model="login.password"  @keyup.enter="userLogin" placeholder="密碼">
           <button class="loginBtn" @click="userLogin">登入</button>
-          <span class="forgetPwd">忘記密碼?</span>
+          <span class="forgetPwd" @click="this.$router.push('/forgetPwd')">忘記密碼?</span>
         </div>
         <div class="register-form" v-else>
           <span class="title">註冊</span>
@@ -31,7 +34,7 @@
 </template>
 
 <script>
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail} from "firebase/auth";
 import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
 import { auth, db } from "@/config/firebaseConfig.js";
 
@@ -44,10 +47,10 @@ export default {
             password: '123123123'
           },
           register: {
-            name: '連小逼',
-            email:'ujhy669917@gmail.com',
-            password: 'qaz6699wsx',
-            phone: '0971007970'
+            name: '',
+            email:'',
+            password: '',
+            phone: ''
           },
           pdWrong: false,
           emailWrong: false,
@@ -110,89 +113,114 @@ export default {
               
           })
       })
-    }
+    },
+
+    sendPasswordResetEmail() {
+        sendPasswordResetEmail(auth, this.user.email).then(() => {
+            alert('已傳送至' + this.user.email + '信箱中');
+        })
+    },
   },
-  
 }
 </script>
 
 <style lang="less" scoped>
-    .login-container {
-      margin-bottom: 10rem;
-        .login-content {
-          width: 600px;
-          margin: 50px auto;
-          padding-bottom: 20px;
-          border: 1px solid var(--color-gray);
-        }
-        .tab {
-          display: flex;
-          justify-content: center;
-          font-weight: 500;
-          padding: 0;
-          margin: 0;
-          color: #777777;
-          li {
-            width: 50%;
-            cursor: pointer;
-            text-align: center;
-            padding: 20px 0;
-            &:first-child {
-              border-right: 1px solid var(--color-gray);
-            }
-          }
-        }
-        .form-container {
-          width: 75%;
-          margin: 30px auto;
-          .title {
-            margin-bottom: 20px;
-            text-align: center;
-          }
-          .login-form {
-            display: flex;
-            flex-direction: column;
-            span:last-child {
-              margin-top: 10px;
-            }
-            .forgetPwd {
-              text-align: center;
-              cursor: pointer;
-              color: var(--color-gray);
-              font-size: 14px;
-            }
-          }
-          .register-form {
-            display: flex;
-            flex-direction: column;
-          }
-          input {
-            height: 30px;
-            font-size: 14px;
-            text-indent: 0.5rem;
-            border: var(--color-gray) 1px solid;
-            margin-bottom: 35px;
-            padding: .2rem .6rem;
-            border-radius: 5px;
-          }
-          button {
-            width: 50%;
-            height: 60px;
-            border: var(--color-gray) 1px solid;
-            background: rgb(50, 175, 19);
-            color: whitesmoke;
-            font-weight: 600;
-            margin: auto;
-            cursor: pointer;
-            border-radius: 5px;
-          }
-          select {
-            height: 30px;
-            text-indent: 0.5rem;
-            margin: 10px;
-          }
-        }
+  .login-container{
+      display: flex;
+      width: 80%;
+      min-width: 1200px;
+      height: 700px;
+      margin: 0 auto;
+      .login-container div {
+          width: 50%;
+      }
+  }
+  .left {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+          width: 65%;
+      }
+  }
+
+  .login-content {
+    width: 600px;
+    margin: 50px auto;
+    padding-bottom: 20px;
+    border: 1px solid var(--color-gray);
+  }
+
+  .tab {
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+    color: #d4d4d4;
+    li {
+      width: 50%;
+      cursor: pointer;
+      text-align: center;
+      padding: 20px 0;
+      &:first-child {
+        border-right: 1px solid var(--color-gray);
+      }
     }
+  }
+
+  .form-container {
+    width: 75%;
+    margin: 30px auto;
+    .title {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      span:last-child {
+        margin-top: 10px;
+      }
+      .forgetPwd {
+        text-align: center;
+        cursor: pointer;
+        color: var(--color-gray);
+        font-size: 14px;
+      }
+    }
+    .register-form {
+      display: flex;
+      flex-direction: column;
+    }
+    input {
+      margin: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 2.5px;
+      background-color: rgb(243 243 243);
+      color: #646464;
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
+    button {
+      width: 50%;
+      height: 60px;
+      border: var(--color-lighten-orange) 1px solid;
+      background: var(--color-lighten-orange);
+      color: whitesmoke;
+      font-weight: 600;
+      margin: 15px auto;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    select {
+      height: 30px;
+      text-indent: 0.5rem;
+      margin: 10px;
+    }
+  }
+    
     
     p {
       margin: 0;
@@ -207,7 +235,8 @@ export default {
     }
 
     .active {
-      color: var(--color-dark-yellow); 
+      color: var(--color-lighten-orange); 
+      border-top: 3px solid var(--color-lighten-orange);
     }
     .inactive {
       border-bottom: 1px solid var(--color-gray); 

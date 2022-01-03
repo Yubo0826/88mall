@@ -20,9 +20,12 @@
                 <li class="item-row" v-for="(item, index) in items" :key="index" :id="index">
                     <div class="col col-1">
                         <img v-ProdImg="item.imgRef" @click="productRouter(item.id)">
-                        <span>{{ item.name }}</span>
+                        <span @click="productRouter(item.id)">{{ item.name }}</span>
                     </div>
-                    <div class="col col-2">{{ item.spec }} {{ item.size }}</div>
+                    <div class="col col-2">
+                        <span v-if="item.spec || item.size">{{ item.spec }} {{ item.size }}</span>
+                        <span v-else>無</span>
+                    </div>
                     <div class="col col-3">$ {{ item.price }}</div>
                     <div class="col col-4">
                         <div>
@@ -34,7 +37,7 @@
                     <div class="col col-5">$ {{ item.price * item.qty }}</div>
                     <div class="col col-6">
                         <a @click="deleteItem(index)">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: rgba(135, 135, 135, 1);transform: ;msFilter:;"><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path><path d="M9 10h2v8H9zm4 0h2v8h-2z"></path></svg>
+                            <box-icon name='trash' color="#646464"></box-icon>
                         </a>
                     </div>
                 </li>
@@ -70,6 +73,7 @@ import { doc, collection, query, where, getDocs, deleteDoc } from "firebase/fire
 import { onAuthStateChanged } from "firebase/auth";
 import { getProdImgUrl } from "@/request/api.js";
 import BuyFlow from "@/components/BuyFlow.vue";
+import 'boxicons';
 
 export default {
     name: 'Cart',
@@ -132,7 +136,6 @@ export default {
             this.$store.commit('reduceCart');
             deleteDoc(doc(db, 'users', this.userID, 'cart', this.itemsID[index])).then(() => {
                 this.items[index] = "";
-                console.log(this.items);
             });
         },
         productRouter(id) {
@@ -303,6 +306,11 @@ export default {
             }
             span {
                 margin: auto 15px;
+                &:hover {
+                    color: rgb(150, 32, 32);
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
             }
         }
         .col-4 {
@@ -321,7 +329,7 @@ export default {
             }
         }
         .col-6 {
-            svg {
+            box-icon {
                 cursor: pointer;
             }
         }

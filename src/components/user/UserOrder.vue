@@ -31,6 +31,24 @@
                     <td>信用卡已支付</td>
                     <td>250</td>
                 </tr>
+                                <tr>
+                    <td>51239845</td>
+                    <td>色鉛筆</td>
+                    <td>5</td>
+                    <td>2021/12/10</td>
+                    <td>已到達物流中心</td>
+                    <td>信用卡已支付</td>
+                    <td>250</td>
+                </tr>
+                                <tr>
+                    <td>51239845</td>
+                    <td>色鉛筆</td>
+                    <td>5</td>
+                    <td>2021/12/10</td>
+                    <td>已到達物流中心</td>
+                    <td>信用卡已支付</td>
+                    <td>250</td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -46,6 +64,7 @@ export default {
     .order-wrap {
         margin: 15px 0;
         table {
+            width: 90%;
             border-collapse: collapse;
             margin: 0 auto;
             thead {

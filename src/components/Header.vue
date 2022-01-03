@@ -1,28 +1,39 @@
 <template>
-    <div class="header">
-        <div class="header-container">
-            <span>如同空氣包覆般的輕盈保暖，MUJI無印良品羽絨服飾系列上市</span>
-        </div>
+    <div class="header-container">
+        <box-icon name='bell' animation='tada'></box-icon>
+        <span>如同空氣包覆般的輕盈保暖，MUJI無印良品羽絨服飾系列上市</span>
     </div>
 </template>
 
 <script>
+import 'boxicons';
+
 export default {
     name: 'Header',
     methods: {
         openLoginModal() {
-            this.$store.commit('showModal')
+            this.$store.commit('showModal');
         }
     },
 }
 </script>
 
 <style lang="less">
-    .header {
+    .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 100%;
         background: var(--color-dark-yellow);
+    }
+    .box-icon {
+        margin-right: 5px;
+    }
+
+
+    @media only screen and (max-width: 720px) {
         .header-container {
-            text-align: center;
+            display: none;
         }
     }
     

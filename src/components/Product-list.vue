@@ -1,16 +1,38 @@
 <template>
     <div class="list-container">
-        <ul class="product-list">
-            <li class="product-item" v-for="item in sortList" :key="item.id" @click="goDetailsFn(item.id)">
-                <img v-ProdImg="item.imgRef" alt="">
-                <div class="product-name word">{{ item.name }}</div>
-                <div class="product-price word">NT$ <span>{{ item.price }}</span></div>
+        <ul class="product-list" v-if="sortList.length !== 0">
+            <li class="product-item" v-for="(item, index) in sortList" :key="item.id">
+                <div class="top" 
+                    @mouseover="hover[index] = true"
+                    @mouseleave="hover[index] = false"
+                >
+                    <img v-ProdImg="item.imgRef"  :class="{'dark': hover[index]}" @click="goDetailsFn(item.id)">
+                    <div class="track-btn" v-show="hover[index]">
+                        <AddToTrackBtn
+                            :productInfo="{
+                                id: item.id,
+                                imgRef: item.imgRef,
+                                name: item.name,
+                                price: item.price
+                            }"
+                        ></AddToTrackBtn>
+                    </div>
+                </div>
+                <div @click="goDetailsFn(item.id)">
+                    <div class="product-name word">{{ item.name }}</div>
+                    <div class="product-price word">NT$ <span>{{ item.price }}</span></div>
+                </div>
             </li>
         </ul>
+        <div v-show="this.$route.query.query" v-else class="alert">
+            <h1>尚未搜尋到你所查詢的「{{ $route.query.query }}」相關商品</h1>
+            <span>請更改關鍵字或重新嘗試</span>
+        </div>
     </div>
 </template>
 
 <script>
+import AddToTrackBtn from "@/components/button/AddToTrackBtn.vue";
 import { db } from "@/config/firebaseConfig.js";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { getProdImgUrl } from "@/request/api.js";
@@ -19,22 +41,38 @@ export default {
     data() {
         return {
             productsList: [],
-            test: []
+            hover: [],
         }
     },
+    components: { AddToTrackBtn },
     props: ['sort'],
-    beforeMount() {
-        if(typeof this.$route.params.type !== "undefined") {
-            var q = query(collection(db, "products"), where('class', 'array-contains', this.$route.params.type));
+    created() {
+        // 當 route為 '/products/:type'時 (使用者點選商品分類其中一類)
+        if(typeof this.$route.params.type1 !== "undefined") {
+            var queryType;
+            if(typeof this.$route.params.type2 !== "undefined"){queryType = this.$route.params.type2;}
+            else {queryType = this.$route.params.type1;}
+
+            var q = query(collection(db, "products"), where('class', 'array-contains', queryType));
             getDocs(q).then((val) => {
                 val.forEach((doc) => {
                     this.productsList.push(doc.data());
                 })
             })
-        } else {
+        } 
+        else {
             getDocs(collection(db, "products")).then((val) => {
                 val.forEach((doc) => {
-                    this.productsList.push(doc.data());
+                    // 當 route為 '/products?query='時 (使用者搜尋商品)
+                    if(this.$route.query.query) {
+                        if(doc.data().name.includes(this.$route.query.query)) {
+                            this.productsList.push(doc.data());
+                            this.hover.push(false);
+                        }
+                    }else {
+                        this.productsList.push(doc.data());
+                        this.hover.push(false);
+                    }
                 })
             })
         }
@@ -42,14 +80,17 @@ export default {
     computed: {
         sortList() {
             // props 父傳值給子，依造不同排序對應商品排列方式
-            switch(this.sort) {
-                case 'lowToHigh':
-                    return this.selectionSort(this.productsList);
-                case 'HighToLow':
-                    return this.selectionSort(this.productsList).reverse();
-                default:
-                    return this.productsList;
+            if(this.productsList !== null){
+                switch(this.sort) {
+                    case 'lowToHigh':
+                        return this.selectionSort(this.productsList);
+                    case 'HighToLow':
+                        return this.selectionSort(this.productsList).reverse();
+                    default:
+                        return this.productsList;
+                }
             }
+            else{return null}
         },
     },
     methods: {
@@ -102,28 +143,41 @@ export default {
         align-items: center; 
         padding: 0;
         .product-item {
+            position: relative;
             width: 33%;
+            margin-bottom: 50px;
             padding: 0 10px;
             box-sizing: border-box;
-            margin-bottom: 50px;
             cursor: pointer;
-            position: relative;
-            img {
-                width: 100%;
-                margin-bottom: 10px;
-                &:hover {
-                    -webkit-filter: opacity(.2);
+            .top {
+                position: relative;
+                .track-btn {
+                    position: absolute;
+                    top: 75%;
+                    left: 50%;
+                    transform: translate(-50%,0);
+                    width: 80%;
+                    padding: 5px;
+                    background-color: rgba(255, 255, 255, 1);
+                    border-radius: 2.5px;
+                }
+                img {
+                    width: 100%;
+                    margin-bottom: 10px;
+                }
+                .dark {
+                    -webkit-filter: brightness(.7);
                 }
             }
             .product-name {
                 margin-bottom: 5px;
-                font-weight: 300;
+                font-weight: 400;
             }
             .product-price {
                 color: brown;
+                font-weight: 800;
                 span {
                     font-size: 18px;
-                    font-weight: 600;
                 }
             }   
         }
@@ -131,5 +185,12 @@ export default {
 }
 .word {
     text-align: center;
+}
+
+.alert {
+    text-align: center;
+    span {
+        font-size: 18px;
+    }
 }
 </style>

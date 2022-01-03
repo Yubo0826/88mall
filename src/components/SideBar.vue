@@ -9,8 +9,8 @@
                 <i class="arrow" :class="{'down':!active[0], 'up':active[0]}" ref="arrow"></i>
                 <slide-up-down v-model="active[0]" :duration="800">
                     <ul class="inner-list">
-                        <li>鉛筆</li>
-                        <li>原子筆</li>
+                        <li><router-link to="/products/stationery/鉛筆">鉛筆</router-link></li>
+                        <li><router-link to="/products/stationery/原子筆">原子筆</router-link></li>
                     </ul>
                 </slide-up-down>
             </li>
@@ -22,8 +22,8 @@
                 <i class="arrow" :class="{'down':!active[1], 'up':active[1]}" ref="arrow"></i>
                 <slide-up-down v-model="active[1]" :duration="800">
                     <ul class="inner-list">
-                        <li>MEN</li>
-                        <li>WOMAN</li>
+                        <li><router-link to="/products/clothing/男裝">MEN</router-link></li>
+                        <li><router-link to="/products/clothing/女裝">WOMAN</router-link></li>
                     </ul>
                 </slide-up-down>
             </li>
@@ -53,12 +53,12 @@ export default {
 </script>
 <style lang="less" scoped>
     .sidebar-container {
-        width: 190px;
+        width: 200px;
         letter-spacing: .75rem;
         ul {
             .tab {
                 margin-bottom: 15px;
-                padding: 10px 0;
+                padding: 10px 0 10px 5px;
                 border-bottom: 1px solid rgba(0, 0, 0, 5%);
                 &:hover {
                     background-color: var(--color-dark-yellow);

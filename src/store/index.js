@@ -13,7 +13,7 @@ export default createStore({
       },
       reduceCart(state) {
         state.itemInCart--;
-      }
+      },
     },
     actions: {
       // 由於 mutations只能處理同步函數，所以使用異步函數要在 actions

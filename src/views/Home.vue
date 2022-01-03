@@ -3,7 +3,7 @@
     <div class="baaner-container">
       <carousel :autoplay="4000" :items-to-show="1" wrapAround="true" transition="600">
         <slide v-for="slide in bannerArr" :key="slide">
-          <img :src="require('../assets/image/' + slide)" alt="" class="carousel__item">
+          <img :src="require('../assets/image/banners/' + slide)" alt="" class="carousel__item">
         </slide>
 
         <template #addons>
@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       productsArr: [],
-      bannerArr: ['banner.png', 'banner.png', 'banner.png', 'banner.png'],
+      bannerArr: ['banner1.jpg', 'banner2.jpg', 'banner3.jpg', 'banner4.jpg', 'banner5.jpg'],
     }
   },
 }
@@ -43,8 +43,7 @@ export default {
 .home {
   .baaner-container {
     .carousel__item {
-      min-height: 500px;
-      width: 100%;
+      width: 40%;
     }
 
     .carousel__slide {

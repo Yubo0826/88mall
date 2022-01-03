@@ -11,7 +11,11 @@ const routes = [
     component: () => import('../views/Products.vue'),
   },
   {
-    path: '/products/:type',
+    path: '/products/:type1',
+    component: () => import('../views/Products.vue'),
+  },
+  {
+    path: '/products/:type1/:type2',
     component: () => import('../views/Products.vue'),
   },
   {
@@ -33,19 +37,28 @@ const routes = [
   {
     path: '/user',
     component: () => import('../views/User.vue')
-
   },
   {
     path: '/cart',
     component: () => import('../views/Cart.vue')
-
+  },
+  {
+    path: '/forgetPwd',
+    component: () => import('../views/forgetPwd.vue')
   },
 ]
 
 // 建立 VueRouter 實體物件
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
+  // scrollBehavior (savedPosition) {
+  //   if (savedPosition) {
+  //     return savedPosition
+  //   } else {
+  //     return { x: 0, y: 0 }
+  //   }
+  // }
 })
 
 

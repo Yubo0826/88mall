@@ -6,20 +6,20 @@
                     <li @click="action = 'profile'" :class="action === 'profile' ? 'active' : 'inactive'"><span>用戶資料</span></li>
                     <li @click="action = 'order'" :class="action === 'order' ? 'active' : 'inactive'"><span>用戶訂單</span></li>
                     <li @click="action = 'message'" :class="action === 'message' ? 'active' : 'inactive'"><span>訊息通知</span></li>
-                    <li @click="action = 'like'" :class="action === 'like' ? 'active' : 'inactive'"><span>按讚商品</span></li>
+                    <li @click="action = 'track'" :class="action === 'track' ? 'active' : 'inactive'"><span>追蹤商品</span></li>
                 </ul>
             </div>
             <div class="tab-content">
                 <!-- profile 區塊 -->
                 <UserProfile v-if="action === 'profile'"></UserProfile>
                 <!-- order 區塊 -->
-                <UserOrder v-else-if="action === 'order'"></UserOrder>   
+                <UserOrder v-else-if="action === 'order'"></UserOrder>
                     
                 <!-- message 區塊 -->
                 <UserMessage v-else-if="action === 'message'"></UserMessage>   
                     
                 <!-- like 區塊 -->
-                <UserLike v-else></UserLike>
+                <UserTrack v-else></UserTrack>
                     
             </div>
         </div>
@@ -30,7 +30,7 @@
 import UserProfile from '@/components/user/UserProfile.vue';
 import UserOrder from '@/components/user/UserOrder.vue';
 import UserMessage from '@/components/user/UserMessage.vue';
-import UserLike from '@/components/user/UserLike.vue';
+import UserTrack from '@/components/user/UserTrack.vue';
 
 export default {
     data() {
@@ -42,7 +42,7 @@ export default {
             userPhone: null,
         }
     },
-    components: { UserProfile, UserOrder, UserMessage, UserLike },
+    components: { UserProfile, UserOrder, UserMessage, UserTrack },
 }
 </script>
 

@@ -79,17 +79,26 @@
             </div>
 
             <div class="btns box">
-              <AddToCartBtn @click="addToCart"></AddToCartBtn>
+              <AddToCartBtn :product="{
+                id: productInfo.id,
+                imgRef: productInfo.imgRef,
+                name: productInfo.name,
+                price: productInfo.price,
+                size: this.size,
+                spec: this.spec,
+                qty: this.qty,
+              }"></AddToCartBtn>
               <button class="buyNow" @click="buyNow">立即購買</button>
             </div>
             <div class="pd-track">
-              <div v-if="isTrack" @click="handleTrack">
-                <box-icon name='star' type='solid' color='#f8e662'></box-icon>
-              </div>
-              <div v-else @click="handleTrack">
-                <box-icon name='star'></box-icon>
-              </div>
-              <span>追蹤商品</span>
+              <AddToTrackBtn
+                :productInfo="{
+                    id: productInfo.id,
+                    imgRef: productInfo.imgRef,
+                    name: productInfo.name,
+                    price: productInfo.price
+                }"
+              ></AddToTrackBtn>
             </div>
           </div>
         </div>
@@ -99,6 +108,7 @@
 </template>
 
 <script>
+import AddToTrackBtn from "@/components/button/AddToTrackBtn.vue";
 import AddToCartBtn from "@/components/button/AddToCartBtn.vue";
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import SideBar from "@/components/SideBar.vue";
@@ -106,9 +116,7 @@ import 'boxicons';
 import { VueProductSlider } from "../product-slider/index";
 import { getProdDetail, getProdImgUrl } from "@/request/api.js";
 import { getStorage, ref, listAll } from "firebase/storage";
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, collection, query, where, getDocs, addDoc, deleteDoc, } from "firebase/firestore";
-import { db, auth } from "@/config/firebaseConfig.js";
+
 
 export default {
   data() {
@@ -127,7 +135,8 @@ export default {
     Breadcrumb,
     VueProductSlider,
     AddToCartBtn,
-    SideBar
+    SideBar,
+    AddToTrackBtn
   },
 
   props: {
@@ -141,32 +150,11 @@ export default {
       this.productInfo = res;
     });
 
-    // 檢查這項商品使用者有無追蹤
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const q = query(
-          collection(db, "users"),
-          where("email", "==", user.email)
-        );
-        getDocs(q).then((val) => {
-          val.forEach((d) => {
-            // 從 firestore取得使用者的文件 ID，存入元件 Data中
-            this.userDocID = d.id;
-            const trackRef = collection(db, "users", d.id, "track");
-            const u = query(trackRef, where('id', '==', this.productInfo.id));
-            getDocs(u).then((val) => {
-              val.forEach((d) => {
-                if(d.exists()) {
-                  this.isTrack = true;
-                }else {
-                  this.isTrack = false;
-                }
-              })
-            })
-          })
-        });
-      }
-    })
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
   },
 
   mounted() {
@@ -241,98 +229,10 @@ export default {
       }
     },
 
-    addToCart() {
-      let product = {
-        id: this.productInfo.id,
-        imgRef: this.productInfo.imgRef,
-        name: this.productInfo.name,
-        size: this.size,
-        spec: this.spec,
-        qty: this.qty,
-        price: this.productInfo.price,
-      };
-
-      const user = auth.currentUser;
-      // 已登入情況下
-      // 資料會存放在 firestore
-      if (user) {
-        // 從 firestore取得使用者的文件 ID
-        const q = query(
-          collection(db, "users"),
-          where("email", "==", user.email)
-        );
-        getDocs(q).then((val) => {
-          val.forEach((d) => {
-            // 取得會員 firestore 購物車路徑(集合)
-            const cartRef = collection(db, "users", d.id, "cart");
-            addDoc(cartRef, product);
-            alert("此商品已加入購物車!");
-            this.$store.commit("incrementCart");
-          });
-        });
-      }
-      // 非登入情況下
-      // 資料會存放在 localstorage
-      else {
-        let products = [];
-        if (localStorage.getItem("products_in_cart") !== null) {
-          products = JSON.parse(localStorage.getItem("products_in_cart"));
-          products.push(product);
-          this.$store.commit("incrementCart");
-          localStorage.setItem("products_in_cart", JSON.stringify(products));
-        } else {
-          products.push(product);
-          this.$store.commit("incrementCart");
-          localStorage.setItem("products_in_cart", JSON.stringify(products));
-        }
-
-        alert("此商品已加入購物車!");
-      }
-    },
-
     buyNow() {
       this.addToCart();
       this.$router.push('/cart');
     },
-
-    handleTrack() {
-      let product = {
-      id: this.productInfo.id,
-      imgRef: this.productInfo.imgRef,
-      name: this.productInfo.name,
-      price: this.productInfo.price,
-      };
-
-      const user = auth.currentUser;
-      if (user) {
-        const trackRef = collection(db, "users", this.userDocID, "track");
-        // 有追蹤情況，移除商品doc
-        if(this.isTrack) {
-          const q = query(trackRef, where('id', '==', this.productInfo.id));
-          getDocs(q).then((val) => {
-            val.forEach((d) => {
-              deleteDoc(doc(db, "users", this.userDocID, "track", d.id)).then(() => {
-                this.isTrack = false;
-                alert('取消追蹤!');
-              });
-            })
-          })
-        }
-        //無追蹤情況，加入doc
-        else {
-          addDoc(trackRef, product).then(() => {
-            this.isTrack = true;
-            alert("以追蹤此商品!");
-          });
-        }
-      }
-      
-    
-      else {
-        alert('尚未登入!');
-      }
-    },
-
 
   },
 
