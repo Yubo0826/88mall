@@ -1,50 +1,129 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import Header from '../components/Header.vue';
+import Navbar from '../components/Navbar.vue';
+import Footer from '../components/Footer.vue';
 
 const routes = [
   {
     path: '/',
-    component: Home
+    components: {
+      default: () => import('../views/Home.vue'),
+      header: Header,
+      navbar: Navbar,
+      footer: Footer,
+    }
   },
   {
-    path: '/products/',
-    component: () => import('../views/Products.vue'),
+    path: '/products',
+    components: {
+      default: () => import('../views/Products.vue'),
+      header: Header,
+      navbar: Navbar,
+      footer: Footer,
+    }
   },
   {
     path: '/products/:type1',
-    component: () => import('../views/Products.vue'),
+    components: {
+      default: () => import('../views/Products.vue'),
+      header: Header,
+      navbar: Navbar,
+      footer: Footer,
+    }
   },
   {
     path: '/products/:type1/:type2',
-    component: () => import('../views/Products.vue'),
+    components: {
+      default: () => import('../views/Products.vue'),
+      header: Header,
+      navbar: Navbar,
+      footer: Footer,
+    }
   },
   {
     path: '/details',
-    component: () => import('../views/Details.vue'),
+    components: {
+      default: () => import('../views/Details.vue'),
+      header: Header,
+      navbar: Navbar,
+      footer: Footer,
+    }
   },
   {
     path: '/order',
-    component: () => import('../views/Order.vue')
+    components: {
+      default: () => import('../views/Order.vue'),
+      header: Header,
+      navbar: Navbar,
+      footer: Footer,
+    }
   },
   {
     path: '/contact',
-    component: () => import('../views/Contact.vue')
+    components: {
+      default: () => import('../views/Contact.vue'),
+      header: Header,
+      navbar: Navbar,
+      footer: Footer,
+    }
   },
   {
     path: '/login',
-    component: () => import('../views/Login.vue')
+    components: {
+      default: () => import('../views/Login.vue'),
+      header: Header,
+      navbar: Navbar,
+      footer: Footer,
+    }
   },
   {
     path: '/user',
-    component: () => import('../views/User.vue')
+    components: {
+      default: () => import('../views/User.vue'),
+      header: Header,
+      navbar: Navbar,
+      footer: Footer,
+    }
   },
   {
     path: '/cart',
-    component: () => import('../views/Cart.vue')
+    components: {
+      default: () => import('../views/Cart.vue'),
+      header: Header,
+      navbar: Navbar,
+      footer: Footer,
+    }
   },
   {
     path: '/forgetPwd',
-    component: () => import('../views/forgetPwd.vue')
+    components: {
+      default: () => import('../views/ForgetPwd.vue'),
+      header: Header,
+      navbar: Navbar,
+      footer: Footer,
+    }
+  },
+  {
+    path: '/admin',
+    component: () => import('../views/admin/admin.vue'),
+    children: [
+      {
+        path: 'product',
+        component: () => import('../views/admin/product.vue')
+      },
+      {
+        path: 'user',
+        component: () => import('../views/admin/user.vue')
+      },
+      {
+        path: 'order',
+        component: () => import('../views/admin/order.vue')
+      },
+      {
+        path: 'product/addProduct',
+        component: () => import('../views/admin/addProduct.vue')
+      },
+    ]
   },
 ]
 
@@ -52,13 +131,6 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  // scrollBehavior (savedPosition) {
-  //   if (savedPosition) {
-  //     return savedPosition
-  //   } else {
-  //     return { x: 0, y: 0 }
-  //   }
-  // }
 })
 
 

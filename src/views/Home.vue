@@ -43,7 +43,7 @@ export default {
 .home {
   .baaner-container {
     .carousel__item {
-      width: 40%;
+      width: 55%;
     }
 
     .carousel__slide {

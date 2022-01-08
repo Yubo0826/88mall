@@ -1,10 +1,9 @@
 <template>
   <div class="app">
-    <Header />
-    <Navbar />
-    <!-- 渲染 route 的位置 -->
+    <router-view name="header"></router-view>
+    <router-view name="navbar"></router-view>
     <router-view :key="$route.fullPath"/>
-    <Footer />
+    <router-view name="footer"></router-view>
     <div class="arrow-box" @click="scrollToTop">
       <button type="button" ref="backTop" class="toTop-arrow"></button>
     </div>
@@ -13,16 +12,14 @@
 
 <script>
 // @ is an alias to /src
-import Header from '@/components/Header.vue'
-import Navbar from '@/components/Navbar.vue'
-import Footer from '@/components/Footer.vue'
+// import Header from '@/components/Header.vue'
+// import Navbar from '@/components/Navbar.vue'
+// import Footer from '@/components/Footer.vue'
 
 export default {
   name: 'App',
   components: {
-    Header,
-    Navbar,
-    Footer,
+
   },
   created() {
     window.addEventListener("scroll", this.handleArrowBtn);

@@ -1,16 +1,13 @@
 <template>
     <div>
-        關於我們
-        這裡寫製作網站的東西心得之類的
+        ss
     </div>
 </template>
-
 <script>
 export default {
     
 }
 </script>
-
 <style lang="less" scoped>
-
+    
 </style>

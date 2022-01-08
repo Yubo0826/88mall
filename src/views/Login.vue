@@ -63,7 +63,7 @@ export default {
     userLogin() {
         signInWithEmailAndPassword(auth, this.login.email, this.login.password)
         .then(()=> {
-          this.$router.push('/user');
+          this.$router.go(-1);
           this.handleUserCart();
           alert('Successfully login!.');
         })
@@ -90,7 +90,11 @@ export default {
           }).catch((error) => {
               const errorCode = error.code;
               this.emailInvalid = errorCode == 'auth/invalid-email' ? true : false;
-              this.emailRegisted = errorCode == 'auth/email-already-in-use' ? true : false;        
+              this.emailRegisted = errorCode == 'auth/email-already-in-use' ? true : false;
+              setTimeout(() => {
+                this.emailInvalid = false; 
+                this.emailRegisted = false;
+              }, 2000);     
           })
     },
 
@@ -127,8 +131,7 @@ export default {
 <style lang="less" scoped>
   .login-container{
       display: flex;
-      width: 80%;
-      min-width: 1200px;
+      width: 1200px;
       height: 700px;
       margin: 0 auto;
       .login-container div {
@@ -148,23 +151,23 @@ export default {
     width: 600px;
     margin: 50px auto;
     padding-bottom: 20px;
-    border: 1px solid var(--color-gray);
+    border: 1px solid #ebebeb;
   }
 
   .tab {
     display: flex;
     justify-content: center;
-    font-weight: 500;
-    padding: 0;
     margin: 0;
+    padding: 0;
     color: #d4d4d4;
+    font-weight: 500;
     li {
       width: 50%;
-      cursor: pointer;
-      text-align: center;
       padding: 20px 0;
+      text-align: center;
+      cursor: pointer;
       &:first-child {
-        border-right: 1px solid var(--color-gray);
+        border-right: 1px solid #ebebeb;
       }
     }
   }
@@ -239,7 +242,7 @@ export default {
       border-top: 3px solid var(--color-lighten-orange);
     }
     .inactive {
-      border-bottom: 1px solid var(--color-gray); 
+      border-bottom: 1px solid #ebebeb; 
       background-color: #fcfcfc;
     }
 

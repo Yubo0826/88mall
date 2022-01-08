@@ -1,6 +1,8 @@
 <template>
     <div class="contact-container">
         <div class="left">
+            <div class="title">與我們聯繫</div>
+            <div class="description">輸入email會回傳信件</div>
             <img src="../assets/image/undraw-contact.svg" alt="">
         </div>
         <div class="right">
@@ -26,7 +28,7 @@ export default {
                 .then((result) => {
                     alert('已成功寄出！', result.text);
                 }, (error) => {
-                    alert('FAILED...', error.text);
+                    alert('請正確填寫表格！', error.text);
                 });
         }
     }
@@ -46,8 +48,21 @@ export default {
 
     .left {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        .title {
+            margin-right: 200px;
+            text-align: center;
+            font-size: 30px;
+            font-weight: 500;
+        }
+        .description {
+            margin-right: 150px;
+            text-align: center;
+            font-size: 16px;
+            color: #b1b1b1;
+        }
         img {
             width: 80%;
         }
@@ -73,7 +88,7 @@ export default {
         line-height: 1.5rem;
     }
     input {
-        height: 30px;
+        height: 45px;
     }
     textarea {
         height: 200px;
@@ -82,8 +97,10 @@ export default {
     .send {
         width: 150px;
         height: 50px;
+        margin-top: 25px;
         background-color: var(--color-lighten-orange);
         color: white;
+        cursor: pointer;
     }
 
 </style>
