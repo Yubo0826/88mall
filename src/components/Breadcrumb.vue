@@ -3,10 +3,10 @@
         <nav>
           <ul class="breadcrumb-list">
             <li class="breadcrumb-item">
-                <router-link to="/products">全部商品</router-link>
+                <a @click="$router.push('/products')">全部商品</a>
             </li>
             <li class="breadcrumb-item">
-                <router-link to="/products">{{typeName}}</router-link>
+                <a @click="$router.push(typeUrl)">{{typeName}}</a>
             </li>
             <li class="breadcrumb-item" v-if="productName">{{productName}}</li>
           </ul>

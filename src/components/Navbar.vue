@@ -55,13 +55,14 @@
           </label>
         </div>
         <div class="login-btn" @click="handleLogin">
-          <box-icon name='user' color='#646464'></box-icon>
+          <i class='bx bx-user bx-sm' style='color:#646464'  ></i>
         </div>
         <div class="cart-btn" @click="$router.push('/cart')">
-          <box-icon name='cart' color='#646464' animation='tada-hover'></box-icon>
+          <i class='bx bx-cart bx-sm bx-tada-hover' style='color:#646464' ></i>
           <span>{{ $store.state.itemInCart }}</span>
         </div>
       </div>
+      <!-- RWD 尚未做完 -->
       <div class="menu-toggle" id="mobile-menu" @click="memuToggle">
         <span class="bar"></span>
         <span class="bar"></span>
@@ -122,10 +123,10 @@
           </label>
         </div>
         <div class="login-btn" @click="handleLogin">
-          <box-icon name='user' color='#646464'></box-icon>
+          <i class='bx bx-user bx-sm' style='color:#646464'  ></i>
         </div>
         <div class="cart-btn" @click="$router.push('/cart')">
-          <box-icon name='cart' color='#646464' animation='tada-hover'></box-icon>
+          <i class='bx bx-cart bx-sm bx-tada-hover' style='color:#646464' ></i>
           <span>{{ $store.state.itemInCart }}</span>
         </div>
       </div>
@@ -137,7 +138,7 @@
 import { auth, db } from "@/config/firebaseConfig.js";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import 'boxicons';
+import 'boxicons/css/boxicons.min.css'
 
 export default {
   name: "Navbar",
@@ -340,7 +341,7 @@ a {
     visibility: none;
     opacity: 0;
     z-index: -1;
-    transition: height .5s;
+    transition: height .25s;
   }
   &:hover:after {
     opacity: 1;

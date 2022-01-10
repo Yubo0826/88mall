@@ -17,6 +17,7 @@ export default {
     props: ['product'],
     methods: {
         handleClick() {
+            this.$refs.addToCart.disabled = true;
             // 處理按鈕點擊後動畫部分
             const el = this.$refs.addToCart;
             el.classList.add('state-change');
@@ -33,6 +34,10 @@ export default {
                     }, 600);
                 }, 2000);
             }, 2300);
+
+            setTimeout(() => {
+                this.$refs.addToCart.disabled = false;
+            }, 6000)
 
             // 處理資料傳送部分
             const user = auth.currentUser;

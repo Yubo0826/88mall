@@ -102,7 +102,7 @@ export default {
 
             // 有幾個元素，就要找幾輪的最小值
             // 這邊的 i 代表 i 以前的元素都排序好了
-            for (let i = 0; i < length; i++) {
+            for (let i = 0; i < length-1; i++) {
 
                 // 先預設第一個是最小的
                 let min = arr[i];
@@ -118,6 +118,11 @@ export default {
 
                 // ES6 的用法，交換兩個數值
                 [arr[minIndex], arr[i]] = [arr[i], arr[minIndex]];
+
+                let list = [];
+                for(let x=0;x<arr.length;x++ ){
+                    list.push(arr[x].price)
+                }
             }
             return arr;
         }

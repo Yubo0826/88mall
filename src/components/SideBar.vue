@@ -11,11 +11,9 @@
                     <ul class="inner-list">
                         <li><router-link to="/products/stationery/鉛筆">鉛筆</router-link></li>
                         <li><router-link to="/products/stationery/原子筆">原子筆</router-link></li>
+                        <li><router-link to="/products/stationery/事務用品">事務用品</router-link></li>
                     </ul>
                 </slide-up-down>
-            </li>
-            <li class="tab">
-                <router-link to="/products/dailyuse">生活用品</router-link>
             </li>
             <li class="tab" @click="toggle(1)">
                 <router-link to="/products/clothing">衣料</router-link>
@@ -24,6 +22,17 @@
                     <ul class="inner-list">
                         <li><router-link to="/products/clothing/男裝">MEN</router-link></li>
                         <li><router-link to="/products/clothing/女裝">WOMAN</router-link></li>
+                    </ul>
+                </slide-up-down>
+            </li>
+            <li class="tab" @click="toggle(2)">
+                <router-link to="/products/dailyuse">生活用品</router-link>
+                <i class="arrow" :class="{'down':!active[2], 'up':active[2]}" ref="arrow"></i>
+                <slide-up-down v-model="active[2]" :duration="800">
+                    <ul class="inner-list">
+                        <li><router-link to="/products/dailyuse/收納用品">收納用品</router-link></li>
+                        <li><router-link to="/products/dailyuse/衣物洗滌">衣物洗滌</router-link></li>
+                        <li><router-link to="/products/dailyuse/家庭清潔">家庭清潔</router-link></li>
                     </ul>
                 </slide-up-down>
             </li>
@@ -37,7 +46,7 @@ export default {
     name: 'SideBar',
     data() {
         return {
-            active: [false, false],
+            active: [false, false, false],
         }
     },
     components: {
@@ -53,10 +62,10 @@ export default {
 </script>
 <style lang="less" scoped>
     .sidebar-container {
-        width: 200px;
         letter-spacing: .75rem;
         ul {
             .tab {
+                width: 200px;
                 margin-bottom: 15px;
                 padding: 10px 0 10px 5px;
                 border-bottom: 1px solid rgba(0, 0, 0, 5%);
@@ -73,7 +82,8 @@ export default {
                 }
                 .arrow {
                     display: inline-block;
-                    margin-left: 120px;
+                    float: right;
+                    margin-top: 8px;
                     padding: 3px;
                     border: solid black;
                     border-width: 0 3px 3px 0;

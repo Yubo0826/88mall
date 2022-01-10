@@ -43,16 +43,16 @@
             </div>
             <div class="box">
                 <label for="pd_price">商品售價</label>
-                <input type="text" id="pd_price" v-model="price" class="text">
+                <input type="number" id="pd_price" v-model="price" class="text">
             </div>
             <div class="box">
                 <label>商品分類</label>
                 <select v-model="type[0]">
-                    <option value="stationary" selected>文具</option>
-                    <option value="dailyuse">日常用品</option>
+                    <option value="stationery" selected>文具</option>
+                    <option value="dailyuse">生活用品</option>
                     <option value="clothing">衣料</option>
                 </select>
-                <select v-if="type[0]==='stationary'" v-model="type[1]">
+                <select v-if="type[0]==='stationery'" v-model="type[1]">
                     <option value="鉛筆">鉛筆</option>
                     <option value="原子筆">原子筆</option>
                     <option value="事務用品">事務用品</option>
@@ -100,7 +100,7 @@
             </div>
             <div class="box">
                 <label for="pd_left">商品數量</label>
-                <input type="text" id="pd_left" v-model="left" class="text">
+                <input type="number" id="pd_left" v-model="left" class="text">
             </div>
             <div class="box">
                 <label for="pd_description">商品描述</label>
@@ -113,8 +113,9 @@
     </div>
 </template>
 <script>
-import { collection, addDoc } from "firebase/firestore"; 
-import { db } from "@/config/firebaseConfig.js";
+import { db, storage } from "@/config/firebaseConfig.js";
+import { doc, setDoc } from "firebase/firestore"; 
+import { ref, uploadBytes } from "firebase/storage";
 
 export default {
     data() {
@@ -122,15 +123,14 @@ export default {
             name: '',
             id: '',
             mainImgName: '',
-            price: '',
+            price: null,
+            left: null,
             type: [],
             description: '',
             isSpec: false,
             isSize: false,
             imgCount: null,
-            spec: null,
             specList: [],
-            size: null,
             sizeList: [],
         }
     },
@@ -141,6 +141,7 @@ export default {
         },
         imgsPreview(event) {
             this.imgCount = event.target.files.length;
+            console.log(this.$refs.imgs.files);
             setTimeout(() => {
                 if(this.imgCount > 0) {
                     for(let i = 0; i < this.imgCount; i++) {
@@ -162,7 +163,7 @@ export default {
             }
         },
         addProduct() {
-            let imgRef = "/products/" + this.type[0] + '/' + this.id + '/' +  this.mainImgName;
+            let imgRef = '/products/stationary/' + this.id + '/' +  this.mainImgName;
             let product = {
                 id: this.id,
                 name: this.name,
@@ -170,15 +171,24 @@ export default {
                 left: this.left,
                 description: this.description,
                 class: this.type,
-                spec: this.spec,
-                size: this.size,
+                spec: this.specList,
+                size: this.sizeList,
                 imgRef: imgRef
             }
-            addDoc(collection(db, 'products'), product).then(
+            // 產品資料傳給 firebase cloud database
+            setDoc(doc(db, 'products', this.id), product).then(
                 () => {
                     alert('新增成功！');
                 }
             )
+
+            // firebase storage 檔案要一個個上傳
+            for(let i = 0; i < this.$refs.imgs.files.length; i++) {
+                let storageRef = ref(storage, `products/stationary/${this.id}/${this.$refs.imgs.files[i].name}`);
+                uploadBytes(storageRef, this.$refs.imgs.files[i]).then(() => {
+                    console.log('成功上傳到 firebase storage');
+                });
+            }
         }
     },
 }
@@ -206,7 +216,7 @@ export default {
         margin-right: 15px;
     }
     .text {
-        width: 150px;
+        width: 250px;
         height: 20px;
         padding: 7.5px 10px;
         font-size: 16px;

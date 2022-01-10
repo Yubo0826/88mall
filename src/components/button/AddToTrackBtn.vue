@@ -1,10 +1,10 @@
 <template>
     <div class="pd-track">
         <div v-if="isTrack" @click="handleTrack" class="btn">
-            <box-icon name='heart' type='solid' color='#D43636' size='md'></box-icon>
+            <i class='bx bxs-heart bx-md' style='color:#D43636'></i>
         </div>
         <div v-else @click="handleTrack" class="btn"> 
-            <box-icon name='heart' size='md'></box-icon>
+            <i class='bx bx-heart bx-md' size></i>
         </div>
         <span>追蹤商品</span>
     </div>
@@ -13,7 +13,7 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, collection, query, where, getDocs, addDoc, deleteDoc, } from "firebase/firestore";
 import { db, auth } from "@/config/firebaseConfig.js";
-import 'boxicons';
+import 'boxicons/css/boxicons.min.css'
 
 export default {
     name: 'AddToTrackBtn',
