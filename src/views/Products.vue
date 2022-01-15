@@ -1,23 +1,21 @@
 <template>
-    <div>
-        <div class="products-container">
-            <div class="sidebar-wrap">
-                <side-bar></side-bar>
+    <div class="products-container">
+        <div class="sidebar-wrap">
+            <side-bar></side-bar>
+        </div>
+        <div>
+            <div class="top">
+                <div class="breadcrumb-wrap">
+                    <bread-crumb></bread-crumb>
+                </div>
+                <select v-model="sort" >
+                    <option value="default">默認排序</option>
+                    <option value="lowToHigh">價錢:低到高</option>
+                    <option value="HighToLow">價錢:高到低</option>
+                </select>
             </div>
-            <div>
-                <div class="top">
-                    <div class="breadcrumb-wrap">
-                        <bread-crumb></bread-crumb>
-                    </div>
-                    <select v-model="sort" >
-                        <option value="default">默認排序</option>
-                        <option value="lowToHigh">價錢:低到高</option>
-                        <option value="HighToLow">價錢:高到低</option>
-                    </select>
-                </div>
-                <div class="list-wrap">
-                    <product-list :sort="sort"></product-list>
-                </div>
+            <div class="list-wrap">
+                <product-list :sort="sort"></product-list>
             </div>
         </div>
     </div>
@@ -47,7 +45,7 @@ export default {
 <style lang="less" scoped>
     .products-container {
         display: flex;
-        width: 1200px;
+        max-width: 1200px;
         margin: 50px auto;
     }
     .sidebar-wrap {

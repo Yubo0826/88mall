@@ -1,13 +1,13 @@
 <template>
     <div class="buyflow-container">
         <div class="icon-container">
-            <div class="box">
+            <div class="box" @click="$router.push('/products')">
                 <box-icon name='shopping-bag'></box-icon>
             </div>
-            <div class="box">
+            <div class="box" :class="isCartStep ?'active' :''" @click="$router.push('/cart')">
                 <box-icon name='cart'></box-icon>
             </div>
-            <div class="box">
+            <div class="box" :class="isCartStep ?'' :'active'" @click="$router.push('/checkout')">
                 <box-icon name='credit-card'></box-icon>
             </div>
         </div>
@@ -23,6 +23,11 @@ import 'boxicons';
 
 export default {
     name: 'BuyFlow',
+    data() {
+        return {
+        }
+    },
+    props: [ 'isCartStep' ],
 }
 </script>
 <style lang="less" scoped>
@@ -41,7 +46,7 @@ export default {
             top: 50%;
             width: 100%;
             height: 5px;
-            background-color: var(--color-dark-yellow);
+            background-color: #f8f2c1;
         }
         .box {
             display: flex;
@@ -50,6 +55,10 @@ export default {
             width: 80px;
             height: 80px;
             border-radius: 50%;
+            background-color: #f8f2c1;
+            cursor: pointer;
+        }
+        .active {
             background-color: var(--color-dark-yellow);
         }
     }
@@ -61,5 +70,6 @@ export default {
             text-align: center;
         }
     }
+
 }
 </style>

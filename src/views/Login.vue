@@ -17,6 +17,7 @@
           <input type="text" v-model="login.password"  @keyup.enter="userLogin" placeholder="密碼">
           <button class="loginBtn" @click="userLogin">登入</button>
           <span class="forgetPwd" @click="this.$router.push('/forgetPwd')">忘記密碼?</span>
+          <span @click="$router.push('/admin/product')" id="admin">進入後台管理</span>
         </div>
         <div class="register-form" v-else>
           <span class="title">註冊</span>
@@ -98,6 +99,7 @@ export default {
           })
     },
 
+    // 把 localStorage data 傳到 資料庫
     handleUserCart() {
       const q = query(collection(db, 'users'), where('email', '==', this.login.email))
       getDocs(q).then((val) => {
@@ -186,10 +188,18 @@ export default {
         margin-top: 10px;
       }
       .forgetPwd {
+        margin-top: 5px;
         text-align: center;
         cursor: pointer;
         color: var(--color-gray);
         font-size: 14px;
+      }
+      #admin {
+        color:cornflowerblue;
+        text-decoration: underline;
+        font-size: 14px;
+        text-align: center;
+        cursor: pointer;
       }
     }
     .register-form {

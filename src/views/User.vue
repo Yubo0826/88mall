@@ -4,8 +4,6 @@
             <div class="tab">
                 <ul>
                     <li @click="action = 'profile'" :class="action === 'profile' ? 'active' : 'inactive'"><span>用戶資料</span></li>
-                    <li @click="action = 'order'" :class="action === 'order' ? 'active' : 'inactive'"><span>用戶訂單</span></li>
-                    <li @click="action = 'message'" :class="action === 'message' ? 'active' : 'inactive'"><span>訊息通知</span></li>
                     <li @click="action = 'track'" :class="action === 'track' ? 'active' : 'inactive'"><span>追蹤商品</span></li>
                 </ul>
             </div>
@@ -56,8 +54,6 @@ export default {
             height: 500px;
             display: flex;
             margin: 0 auto;
-            border: 1px solid #aaa;
-            border-radius: 15px;
             .tab {
                 width: 150px;
                 height: 100%;
@@ -69,11 +65,12 @@ export default {
                         box-sizing: border-box;
                         cursor: pointer;
                         border-bottom: 1px solid #aaa;
-                        &:last-child {
-                            border-bottom: 0;
-                        }
+                        border-left: 1px solid #aaa;
                         span {
                             margin: auto;
+                        }
+                        &:nth-of-type(1) {
+                            border-top: 1px solid #aaa;
                         }
                     }
                 }
@@ -82,6 +79,7 @@ export default {
             // tab-content
             .tab-content {
                 width: 100%; 
+                border: 1px solid #aaa;
             }
         }
     }
@@ -96,10 +94,18 @@ export default {
             position: relative;
             left: -5px;
         }
+        &::after {
+            content: '';
+            position: relative;
+            z-index: 2;
+            right: -5px;
+            width: 7px;
+            height: 100%;
+            background-color: #ffffff;
+        }
     }
     .inactive {
         color: var(--color-gray);
         background-color: rgb(252, 252, 252);
-        border-right: 1px solid #aaa;
     }
 </style>

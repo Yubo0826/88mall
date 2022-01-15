@@ -6,7 +6,7 @@
                 <span>{{ itemTotal }} 件產品，$ </span>
                 <strong>{{ pirceTotal }}</strong>
             </div>
-            <BuyFlow></BuyFlow>
+            <BuyFlow :isCartStep="true"></BuyFlow>
             <ul class="cart-table">
                 <li class="table-header">
                     <div class="col col-1">商品名稱</div>
@@ -62,7 +62,7 @@
                         </tr>
                     </tfoot>
                 </table>
-                <button>結帳</button>
+                <button @click="checkout">結帳</button>
             </div>
         </div>
     </div>
@@ -128,6 +128,11 @@ export default {
                 }
             }
         })
+
+        window.scrollTo({
+            top: 0,
+            left: 0,
+        });
     },
     methods: {
          deleteItem(index) {
@@ -148,6 +153,13 @@ export default {
             let x = this.items[index].qty;
             if(x > 1) {
                 this.items[index].qty--;
+            }
+        },
+        checkout() {
+            if(this.userID != null) {
+                this.$router.push('/checkout');
+            }else {
+                alert('請先登入會員！');
             }
         }
     },

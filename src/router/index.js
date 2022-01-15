@@ -95,6 +95,15 @@ const routes = [
     }
   },
   {
+    path: '/checkout',
+    components: {
+      default: () => import('../views/Checkout.vue'),
+      header: Header,
+      navbar: Navbar,
+      footer: Footer,
+    }
+  },
+  {
     path: '/forgetPwd',
     components: {
       default: () => import('../views/ForgetPwd.vue'),

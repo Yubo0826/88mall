@@ -56,6 +56,7 @@ export default {
             text-align: center;
             font-size: 30px;
             font-weight: 500;
+            color: black;
         }
         .description {
             margin-right: 150px;

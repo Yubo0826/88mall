@@ -5,7 +5,7 @@
                 <img src="@/assets/image/logo.svg"/>
             </div>
             <div class="title">後臺管理系統</div>
-            <div class="logout">logout</div>
+            <div class="logout" @click="$router.push('/')">離開</div>
         </div>
         <div class="sidebar">
             <nav>
@@ -50,6 +50,19 @@ export default {
                 width: 150px;
                 margin: 0 auto;
             }
+        }
+        .title {
+            display: flex;
+            align-items: center;
+            font-size: 25px;
+            margin-right: 5px;
+        }
+        .logout {
+            display: flex;
+            align-items: center;
+            color: cornflowerblue;
+            text-decoration: underline;
+            cursor: pointer;
         }
     }
     .sidebar {

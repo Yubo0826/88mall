@@ -1,49 +1,47 @@
 <template>
-    <div class="wrapper">
-        <div class="container">
-            <div class="title">
-                <span>商品列表</span>
-                <a @click="$router.push('/admin/product/addProduct')">新增商品</a>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th class="col-1" align="left">商品編號</th>
-                        <th class="col-2" align="left">商品圖片</th>
-                        <th class="col-3" align="left">商品名稱</th>
-                        <th class="col-4" align="left">商品售價</th>
-                        <th class="col-5" align="left">剩餘數量</th>
-                        <th class="col-6" align="left">刪除商品</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in currentList" :key="index">
-                        <td class="col-1">{{ item.id }}</td>
-                        <td class="col-2">
-                            <img v-ProdImg="item.imgRef">
-                        </td>
-                        <td class="col-3">{{ item.name }}</td>
-                        <td class="col-4">{{ item.price }}</td>
-                        <td class="col-5">{{ item.left }}</td>
-                        <td class="col-6">
-                            <box-icon name='trash' color="#646464"></box-icon>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="pagination">
-                <button class="page-btn" @click="previousPage">←</button>
-                <button 
-                    class="page-btn" 
-                    v-for="n in numOfPage" :key="n"
-                    @click="currentPage = n"
-                    :class="n==currentPage ?'active' :''"
-                    >{{ n }}
-                    </button>
-                <button class="page-btn" @click="nextPage">→</button>
-                <span>每頁顯示項目</span>
-                <input type="number" v-model="numPerPage">
-            </div>
+    <div class="container">
+        <div class="title">
+            <span>商品列表</span>
+            <a @click="$router.push('/admin/product/addProduct')">新增商品</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-1" align="left">商品編號</th>
+                    <th class="col-2" align="left">商品圖片</th>
+                    <th class="col-3" align="left">商品名稱</th>
+                    <th class="col-4" align="left">商品售價</th>
+                    <th class="col-5" align="left">剩餘數量</th>
+                    <th class="col-6" align="left">刪除商品</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in currentList" :key="index">
+                    <td class="col-1">{{ item.id }}</td>
+                    <td class="col-2">
+                        <img v-ProdImg="item.imgRef">
+                    </td>
+                    <td class="col-3">{{ item.name }}</td>
+                    <td class="col-4">{{ item.price }}</td>
+                    <td class="col-5">{{ item.left }}</td>
+                    <td class="col-6">
+                        <box-icon name='trash' color="#646464"></box-icon>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="pagination">
+            <button class="page-btn" @click="previousPage">←</button>
+            <button 
+                class="page-btn" 
+                v-for="n in numOfPage" :key="n"
+                @click="currentPage = n"
+                :class="n==currentPage ?'active' :''"
+                >{{ n }}
+                </button>
+            <button class="page-btn" @click="nextPage">→</button>
+            <span>每頁顯示項目</span>
+            <input type="number" v-model="numPerPage">
         </div>
     </div>
 </template>
@@ -101,7 +99,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-    .wrapper {
+    .container {
         margin: 50px 0;
     }
     .title {

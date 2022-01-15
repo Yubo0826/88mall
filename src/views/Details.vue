@@ -112,10 +112,12 @@ import AddToTrackBtn from "@/components/button/AddToTrackBtn.vue";
 import AddToCartBtn from "@/components/button/AddToCartBtn.vue";
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import SideBar from "@/components/SideBar.vue";
-import 'boxicons';
 import { VueProductSlider } from "../product-slider/index";
 import { getProdDetail, getProdImgUrl } from "@/request/api.js";
 import { getStorage, ref, listAll } from "firebase/storage";
+import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { db, auth } from "@/config/firebaseConfig.js";
+import 'boxicons';
 
 
 export default {
@@ -230,8 +232,39 @@ export default {
     },
 
     buyNow() {
-      this.addToCart();
-      this.$router.push('/cart');
+      // 處理資料傳送部分
+      const user = auth.currentUser;
+      // 已登入情況下
+      // 資料會存放在 firestore
+      if (user) {
+          // 從 firestore取得使用者的文件 ID
+          const q = query(
+          collection(db, "users"),
+          where("email", "==", user.email)
+          );
+          getDocs(q).then((val) => {
+          val.forEach((d) => {
+              // 取得會員 firestore 購物車路徑(集合)
+              const cartRef = collection(db, "users", d.id, "cart");
+              addDoc(cartRef, {
+                id: this.productInfo.id,
+                imgRef: this.productInfo.imgRef,
+                name: this.productInfo.name,
+                price: this.productInfo.price,
+                size: this.size,
+                spec: this.spec,
+                qty: this.qty,
+              });
+              this.$store.commit("incrementCart");
+          });
+          this.$router.push('/checkout');
+          });
+      }
+      // 非登入情況下
+      // 資料會存放在 localstorage
+      else {
+        alert('尚未登入！');
+      }
     },
 
   },
