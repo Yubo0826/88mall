@@ -137,8 +137,12 @@ const routes = [
 ]
 
 // 建立 VueRouter 實體物件
+// const router = createRouter({
+//   history: createWebHistory(process.env.BASE_URL),
+//   routes,
+// })
+
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
   routes,
 })
 
