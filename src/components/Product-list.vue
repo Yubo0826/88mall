@@ -140,7 +140,7 @@ export default {
 
 <style lang="less" scoped>
 .list-container {
-    width: 1200px;
+    width: 100%;
     margin: 20px auto;
     .product-list {
         display: flex;

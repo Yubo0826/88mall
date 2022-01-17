@@ -1,9 +1,9 @@
 <template>
-    <div class="products-container">
-        <div class="sidebar-wrap">
+    <div class="container">
+        <div class="sidebar">
             <side-bar></side-bar>
         </div>
-        <div>
+        <div class="pd-list">
             <div class="top">
                 <div class="breadcrumb-wrap">
                     <bread-crumb></bread-crumb>
@@ -14,7 +14,7 @@
                     <option value="HighToLow">價錢:高到低</option>
                 </select>
             </div>
-            <div class="list-wrap">
+            <div class="list">
                 <product-list :sort="sort"></product-list>
             </div>
         </div>
@@ -43,29 +43,37 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .products-container {
+    .container {
         display: flex;
-        max-width: 1200px;
+        justify-content: center;
+        max-width: 1600px;
+        min-width: 1200px;
         margin: 50px auto;
     }
-    .sidebar-wrap {
+    .sidebar {
         margin-top: 100px;
         margin-right: 30px;
     }
-    .top {
-        display: flex;
-        justify-content: space-between;
-        margin-left: 10px;
-        select {
-            width: 170px;
-            height: 40px;
-            margin-right: 150px;
-            font-size: 16px;
-            text-indent: 5px;
-        }
-        .breadcrumb-wrap {
+    .pd-list {
+        width: 80%;
+        .top {
             display: flex;
-            align-items: center;
+            justify-content: space-between;
+            margin-left: 10px;
+            width: 90%;
+            select {
+                width: 170px;
+                height: 40px;
+                font-size: 16px;
+                text-indent: 5px;
+            }
+            .breadcrumb-wrap {
+                display: flex;
+                align-items: center;
+            }
+        }
+        .list {
+            width: 100%;
         }
     }
 </style>

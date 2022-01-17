@@ -156,10 +156,10 @@ export default {
             }
         },
         checkout() {
-            if(this.userID != null) {
+            if(this.userID != null && this.items.length != 0) {
                 this.$router.push('/checkout');
             }else {
-                alert('請先登入會員！');
+                alert('請先登入會員或無商品在購物車！');
             }
         }
     },

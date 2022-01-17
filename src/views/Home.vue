@@ -61,5 +61,7 @@ export default {
 
 .list-wrap {
   display: flex;
+  width: 75%;
+  margin: auto;
 }
 </style>

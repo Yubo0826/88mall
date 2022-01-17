@@ -5,7 +5,7 @@
             <BuyFlow :isCartStep="false"></BuyFlow>
             <div class="checkout-area">
                 <div class="left">
-                    <div>訂單</div>
+                    <div class="title">訂單</div>
                     <div class="line"></div>
                     <div class="pd-list" id="style-1">
                         <table>
@@ -52,7 +52,7 @@
 
                 <div class="right">
                     <div class="receiver-info">
-                        <div>收貨信息</div>
+                        <div class="title">收貨信息</div>
                         <div class="line"></div>
                         <div class="form-field">
                             <label for="info-name">收貨人姓名:</label>
@@ -69,7 +69,7 @@
                     </div>
 
                     <div class="pay">
-                        <div>付款(不用填:D)</div>
+                        <div class="title">付款(不用填:D)</div>
                         <div class="line"></div>
                         <div id="right">
                             <div class="form">
@@ -133,7 +133,7 @@ export default {
             user: {
                 name: null,
                 email: null, 
-                address: null,
+                address: '',
                 phone: null,
             },
         }
@@ -193,10 +193,15 @@ export default {
                 time: timeStr,
                 total: this.pirceTotal,
             });
-            for(let item of this.items) {
-                addDoc(collection(db, 'orders', docRef.id, 'order'), item);
+
+            if(this.user.address != '') {
+                for(let item of this.items) {
+                    addDoc(collection(db, 'orders', docRef.id, 'order'), item);
+                }
+                alert('下訂單成功發送！');
+            }else {
+                alert('地址尚未填寫!');
             }
-            alert('下訂單成功發送！');
         }
     },
     directives: {
@@ -361,6 +366,10 @@ export default {
         margin-top:10px;
         margin-bottom:10px;
         background:#ddd;
+    }
+
+    .title {
+        text-align: center;
     }
 
     //捲軸底色

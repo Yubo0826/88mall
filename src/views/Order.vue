@@ -9,6 +9,7 @@
                 <div class="col col-5">狀態</div>
                 <div class="col col-6">訂單內容</div>
             </li>
+            <h2 v-show="!isLogin">尚未登入！</h2>
             <li class="item" v-for="item, index in orderList" :key="index">
                 <input type="checkbox" checked>
                 <div class="message">
@@ -42,7 +43,6 @@
                 <div class="line"></div>
             </li>
         </ul>
-        <h2 v-show="!isLogin">尚未登入！</h2>
     </div>
 </template>
 
