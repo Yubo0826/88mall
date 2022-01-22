@@ -150,6 +150,7 @@ export default {
   created() {
     getProdDetail(this.$route.query.id).then((res) => {
       this.productInfo = res;
+      window.document.title = res.name + ' | 八乘八文具鋪';
     });
 
     window.scrollTo({

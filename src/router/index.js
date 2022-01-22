@@ -11,7 +11,8 @@ const routes = [
       header: Header,
       navbar: Navbar,
       footer: Footer,
-    }
+    },
+    meta: {title: '首頁'}
   },
   {
     path: '/products',
@@ -20,7 +21,8 @@ const routes = [
       header: Header,
       navbar: Navbar,
       footer: Footer,
-    }
+    },
+    meta: {title: '全部商品'}
   },
   {
     path: '/products/:type1',
@@ -29,7 +31,8 @@ const routes = [
       header: Header,
       navbar: Navbar,
       footer: Footer,
-    }
+    },
+    meta: {title: '商品分類'}
   },
   {
     path: '/products/:type1/:type2',
@@ -38,7 +41,8 @@ const routes = [
       header: Header,
       navbar: Navbar,
       footer: Footer,
-    }
+    },
+    meta: {title: '商品分類'}
   },
   {
     path: '/details',
@@ -47,7 +51,7 @@ const routes = [
       header: Header,
       navbar: Navbar,
       footer: Footer,
-    }
+    },
   },
   {
     path: '/order',
@@ -56,7 +60,8 @@ const routes = [
       header: Header,
       navbar: Navbar,
       footer: Footer,
-    }
+    },
+    meta: {title: '我的訂單'}
   },
   {
     path: '/contact',
@@ -65,7 +70,8 @@ const routes = [
       header: Header,
       navbar: Navbar,
       footer: Footer,
-    }
+    },
+    meta: {title: '聯絡我們'}
   },
   {
     path: '/login',
@@ -74,7 +80,8 @@ const routes = [
       header: Header,
       navbar: Navbar,
       footer: Footer,
-    }
+    },
+    meta: {title: '會員登入'}
   },
   {
     path: '/user',
@@ -83,7 +90,8 @@ const routes = [
       header: Header,
       navbar: Navbar,
       footer: Footer,
-    }
+    },
+    meta: {title: '個人資料'}
   },
   {
     path: '/cart',
@@ -92,7 +100,8 @@ const routes = [
       header: Header,
       navbar: Navbar,
       footer: Footer,
-    }
+    },
+    meta: {title: '購物車'}
   },
   {
     path: '/checkout',
@@ -101,7 +110,8 @@ const routes = [
       header: Header,
       navbar: Navbar,
       footer: Footer,
-    }
+    },
+    meta: {title: '結帳'}
   },
   {
     path: '/forgetPwd',
@@ -110,7 +120,8 @@ const routes = [
       header: Header,
       navbar: Navbar,
       footer: Footer,
-    }
+    },
+    meta: {title: '忘記密碼'}
   },
   {
     path: '/admin',
@@ -118,33 +129,48 @@ const routes = [
     children: [
       {
         path: 'product',
-        component: () => import('../views/admin/product.vue')
+        component: () => import('../views/admin/product.vue'),
+        meta: {title: '商品列表'}
       },
       {
         path: 'user',
-        component: () => import('../views/admin/user.vue')
+        component: () => import('../views/admin/user.vue'),
+        meta: {title: '會員列表'},
       },
       {
         path: 'order',
-        component: () => import('../views/admin/order.vue')
+        component: () => import('../views/admin/order.vue'),
+        meta: {title: '訂單列表'},
       },
       {
         path: 'product/addProduct',
-        component: () => import('../views/admin/addProduct.vue')
+        component: () => import('../views/admin/addProduct.vue'),
+        meta: {title: '新增產品'},
       },
     ]
   },
 ]
 
+// Mode: history
 // 建立 VueRouter 實體物件
 // const router = createRouter({
 //   history: createWebHistory(process.env.BASE_URL),
 //   routes,
 // })
 
+// Mode: hash
 const router = createRouter({
   history: createWebHashHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if(to.meta.title !== undefined) {    
+    window.document.title = to.meta.title + ' | 八乘八文具鋪';
+    next();
+  }else {
+    next();
+  }
 })
 
 
