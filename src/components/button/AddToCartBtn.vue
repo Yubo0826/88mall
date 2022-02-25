@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import {  doc, collection, query, where, getDocs, addDoc, updateDoc} from "firebase/firestore";
 import { db, auth } from "@/config/firebaseConfig.js";
 
 export default {
@@ -18,7 +18,20 @@ export default {
     methods: {
         handleClick() {
             this.$refs.addToCart.disabled = true;
+            const user = auth.currentUser;
+
             // 處理按鈕點擊後動畫部分
+            this.handleAnimation();
+            // 已登入時: 資料會上傳到 firestore
+            if (user) {
+                this.setProductToFirestore(user);
+            } 
+            // 非登入時: 資料會存放在 localstorage
+            else {
+                this.setProductToLocalStorage();
+            }
+        },
+        handleAnimation() {
             const el = this.$refs.addToCart;
             el.classList.add('state-change');
             el.classList.add('loading-state');
@@ -38,42 +51,60 @@ export default {
             setTimeout(() => {
                 this.$refs.addToCart.disabled = false;
             }, 6000)
-
-            // 處理資料傳送部分
-            const user = auth.currentUser;
-            // 已登入情況下
-            // 資料會存放在 firestore
-            if (user) {
-                // 從 firestore取得使用者的文件 ID
-                const q = query(
+        },
+        async setProductToFirestore(user) {
+            // 從 firestore取得使用者的文件 ID
+            const userId_query = query(
                 collection(db, "users"),
                 where("email", "==", user.email)
-                );
-                getDocs(q).then((val) => {
-                val.forEach((d) => {
-                    // 取得會員 firestore 購物車路徑(集合)
-                    const cartRef = collection(db, "users", d.id, "cart");
-                    addDoc(cartRef, this.product);
-                    this.$store.commit("incrementCart");
-                });
-                });
-            }
-            // 非登入情況下
-            // 資料會存放在 localstorage
-            else {
-                let products = [];
-                if (localStorage.getItem("products_in_cart") !== null) {
+            );
+            console.log(userId_query);
+            let docsSnap = await getDocs(userId_query);
+            docsSnap.forEach((d) => {
+                // 取得會員 firestore 購物車路徑(集合)
+                const cartRef = collection(db, "users", d.id, "cart");
+                const productId_query = query(cartRef, where("id", "==", this.product.id), where("spec", "==", this.product.spec), where("size", "==", this.product.size));
+                console.log(productId_query);
+                getDocs(productId_query)
+                .then(
+                    (val) => {
+                        // 如果新增的商品種類是否已在資料庫購物車中，那就update資料庫的qty value，然後isExists <- true
+                        // 如果商品不存在於資料庫，isExists == false，就add該商品到資料庫購物車
+                        let isExists = false;
+                        
+                        val.forEach((el) => {
+                            isExists = true;
+                            let cartProductRef = doc(db, "users", d.id, "cart", el.id);
+                            let qty = el.data().qty;
+                            qty++;
+                            updateDoc(cartProductRef, {
+                                qty: qty
+                            })
+                        });
+                        
+                        if(!isExists){
+                            addDoc(cartRef, this.product)
+                        }
+                    }
+                )
+                this.$store.commit("incrementCart");
+            });
+
+        },
+        setProductToLocalStorage() {
+            let products = [];
+            if (localStorage.getItem("products_in_cart") !== null) {
                 products = JSON.parse(localStorage.getItem("products_in_cart"));
                 products.push(this.product);
                 this.$store.commit("incrementCart");
                 localStorage.setItem("products_in_cart", JSON.stringify(products));
-                } else {
+            }
+            else {
                 products.push(this.product);
                 this.$store.commit("incrementCart");
                 localStorage.setItem("products_in_cart", JSON.stringify(products));
-                }
             }
-            },
+        }
 
 
     },

@@ -15,7 +15,7 @@
     "firebase": "^9.0.2",
     "gulp-less": "^5.0.0",
     "hooper": "^0.3.4",
-    "vue": "^3.0.0",
+    "vue": "^3.2.31",
     "vue-carousel": "^0.18.0",
     "vue-product-slider": "^0.2.0",
     "vue-router": "^4.0.0-0",
